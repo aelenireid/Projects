@@ -11,7 +11,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 df = pd.read_csv("Project 1 Data.csv")
 
 #prep for strat. data
-split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=501)
+split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=10)
 
 #strat. the data
 for train_index ,test_index in split.split(df,df["Step"]):
