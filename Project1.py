@@ -67,3 +67,47 @@ scaler.fit(X)
 scaled_data = scaler.transform(X)
 test_X = pd.DataFrame(scaled_data, columns=X.columns)
 
+
+#FOR GRID SEARCH PARAMETERS AND MODELS
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+
+# # model 1 random forest
+# model1 = RandomForestClassifier(random_state = 10)
+
+# params1 = {
+#     'n_estimators': [5,15,30],
+#     'max_depth': [None,2,4,6],
+#     'min_samples_split': [2, 6, 10],
+#     'min_samples_leaf': [1, 2, 4],
+#     'max_features': ['sqrt', 'log2']
+# }
+
+# grid_search = GridSearchCV(model1, params1, cv=5, scoring='neg_mean_absolute_error', n_jobs=-1)
+# grid_search.fit(train_X, train_y)
+# best_params = grid_search.best_params_
+# print("Best Hyperparameters:", best_params)
+# best_model1 = grid_search.best_estimator_
+
+
+
+# #model 2 Support vector machine
+# model2 = LogisticRegression(random_state= 10)
+
+# params2 = {
+#     'C': [1,2,3,4,5],
+#     'max_iter': [1000,2000,3000,4000],
+# }
+
+# print("\nrunning grid search for LogisticRegression Model")
+# grid_search = GridSearchCV(model2, params2, cv=5, scoring='neg_mean_absolute_error', n_jobs=-1)
+# grid_search.fit(train_X, train_y)
+# best_params2 = grid_search.best_params_
+# print("Best Hyperparameters:", best_params2)
+# best_model2 = grid_search.best_estimator_
+
+
+
