@@ -25,23 +25,45 @@ def data_processing(df):
 
 
 
-#for performance analysis
-def getScores(true,pred):
-    print("Precision: ", precision_score(true, pred, average= 'micro'))
-    print("Accuracy: ", accuracy_score(true, pred))
-    print("F1 record: ",f1_score(true, pred, average= 'micro'))
-    
-    
-    return None
-
 
 #STEP 1: data import into Dataframe 
 df = pd.read_csv("Project 1 Data.csv")
 
-#STEP 2: data distrubution is shown
+#STEP 2: displays data distrubution 
 sns.countplot(df, x = "Step")
 plt.show()
+
 
 #STEP 3: merely looking at the correlation between points in the corr matrix of training data
 corr_matrix = (df.drop(columns=["Step"])).corr()
 sns.heatmap(np.abs(corr_matrix))
+
+#STEP 4: 20, 80 divided into training and test data. #prepare for shuffle data.
+split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=10)
+#splitting to 20% and 80% data
+for train_index ,test_index in split.split(df,df["Step"]):
+    strat_train_set = df.loc[train_index].reset_index(drop=True)
+    strat_test_set = df.loc[test_index].reset_index(drop=True)
+    
+
+# Extract the target variable (train_y) and features (df_X)
+train_y = strat_train_set["Step"]
+X = strat_train_set.drop(columns=["Step"])
+
+# Scaling the features
+scaler = StandardScaler()
+scaler.fit(X)
+scaled_data = scaler.transform(X)
+train_X = pd.DataFrame(scaled_data, columns=X.columns)
+
+
+# Extract the target variable (test_y) and features (df_X)
+test_y = strat_test_set["Step"]
+X = strat_test_set.drop(columns=["Step"])
+
+# Scaling the features
+scaler = StandardScaler()
+scaler.fit(X)
+scaled_data = scaler.transform(X)
+test_X = pd.DataFrame(scaled_data, columns=X.columns)
+
