@@ -6,17 +6,27 @@ import joblib
 import sklearn as sk
 
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, f1_score, precision_score
 
-#importing data into Dataframe
-df = pd.read_csv("Project 1 Data.csv")
+def data_processing(df):
+    # Extract the target variable (train_y) and features (df_X)
+    y = df["Step"]
+    X = df.drop(columns=["Step"])
 
-#prep for strat. data
-split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=10)
-
-#strat. the data
-for train_index ,test_index in split.split(df,df["Step"]):
-   strat_train_set = df.loc[train_index].reset_index(drop=True)
-   strat_test_set = df.loc[test_index].reset_index(drop=True)
+# Scaling the features
+    scaler = StandardScaler()
+    scaler.fit(X)
+    scaled_data = scaler.transform(X)
+    scaled_data_df = pd.DataFrame(scaled_data, columns=X.columns)
+    print("processed data")
     
-train_y = strat_train_set['Step']
-df_X = strat_train_set.drop(columns = ["Step"])
+    return scaled_data_df, y
+
+
+
+
+
+
+
+
