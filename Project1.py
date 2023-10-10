@@ -72,6 +72,7 @@ test_X = pd.DataFrame(scaled_data, columns=X.columns)
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 
@@ -111,3 +112,18 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 
 
+#model 3 Support vector machine
+model3 = SVC(random_state= 10)
+
+params = {
+    'C': [2,4,6,8,10],
+    'kernel': ['linear','rbf','poly','sigmoid'],
+    'gamma': ['scale','auto'],
+}
+
+print("\nrunning grid search for SVC Model")
+grid_search = GridSearchCV(model3, params, cv=5, scoring='neg_mean_absolute_error', n_jobs=-1)
+grid_search.fit(train_X, train_y)
+best_params = grid_search.best_params_
+print("Best Hyperparameters:", best_params)
+best_model3 = grid_search.best_estimator_
