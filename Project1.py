@@ -25,8 +25,23 @@ def data_processing(df):
 
 
 
+#for performance analysis
+def getScores(true,pred):
+    print("Precision: ", precision_score(true, pred, average= 'micro'))
+    print("Accuracy: ", accuracy_score(true, pred))
+    print("F1 record: ",f1_score(true, pred, average= 'micro'))
+    
+    
+    return None
 
 
+#STEP 1: data import into Dataframe 
+df = pd.read_csv("Project 1 Data.csv")
 
+#STEP 2: data distrubution is shown
+sns.countplot(df, x = "Step")
+plt.show()
 
-
+#STEP 3: merely looking at the correlation between points in the corr matrix of training data
+corr_matrix = (df.drop(columns=["Step"])).corr()
+sns.heatmap(np.abs(corr_matrix))
