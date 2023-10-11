@@ -39,6 +39,14 @@ corr_matrix = (df.drop(columns=["Step"])).corr()
 sns.heatmap(np.abs(corr_matrix))
 
 #STEP 4: 20, 80 divided into training and test data. #prepare for shuffle data.
+# Scaling the features
+
+X = df.drop(columns=["Step"])
+scaler = StandardScaler()
+scaler.fit(X)
+scaled_data = scaler.transform(X)
+train_X = pd.DataFrame(scaled_data, columns=X.columns)
+
 split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=10)
 #splitting to 20% and 80% data
 for train_index ,test_index in split.split(df,df["Step"]):
@@ -50,22 +58,11 @@ for train_index ,test_index in split.split(df,df["Step"]):
 train_y = strat_train_set["Step"]
 X = strat_train_set.drop(columns=["Step"])
 
-# Scaling the features
-scaler = StandardScaler()
-scaler.fit(X)
-scaled_data = scaler.transform(X)
-train_X = pd.DataFrame(scaled_data, columns=X.columns)
-
 
 # Extract the target variable (test_y) and features (df_X)
 test_y = strat_test_set["Step"]
 X = strat_test_set.drop(columns=["Step"])
 
-# Scaling the features
-scaler = StandardScaler()
-scaler.fit(X)
-scaled_data = scaler.transform(X)
-test_X = pd.DataFrame(scaled_data, columns=X.columns)
 
 
 #FOR GRID SEARCH PARAMETERS AND MODELS
@@ -127,3 +124,42 @@ grid_search.fit(train_X, train_y)
 best_params = grid_search.best_params_
 print("Best Hyperparameters:", best_params)
 best_model3 = grid_search.best_estimator_
+
+
+#for performance analysis
+def getScores(true,pred):
+    print("Precision score: ", precision_score(true, pred, average= 'micro'))
+    print("Accuracy score: ", accuracy_score(true, pred))
+    print("F1 score: ",f1_score(true, pred, average= 'micro'))
+    
+    return None
+
+
+#STEP 5: performance
+
+#model 1
+best_model1.fit(train_X,train_y)
+model1_pred = best_model1.predict(test_X)
+
+print("\n~~scores for random forest model~~\n")
+getScores(test_y,model1_pred)
+
+
+#model 2
+best_model2.fit(train_X,train_y)
+model2_pred = best_model2.predict(test_X)
+
+print("\n~~scores for SVC model~~\n")
+getScores(test_y,model2_pred)
+
+    
+
+#model 3
+best_model3.fit(train_X,train_y)
+model3_pred = best_model3.predict(test_X)
+
+print("\n~~scores for DTC model~~\n")
+getScores(test_y,model3_pred)
+
+
+
