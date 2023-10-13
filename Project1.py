@@ -16,6 +16,26 @@ df = pd.read_csv("Project 1 Data.csv")
 sns.countplot(df, x = "Step")
 plt.show()
 
+# Create a figure and a 3D axis
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Create a 3D scatter plot with color-coded points based on "Step"
+sc = ax.scatter(df['X'], df['Y'], df['Z'], c=df['Step'], cmap='viridis', marker='o')
+
+# Add color bar
+cbar = plt.colorbar(sc,orientation='vertical', cax=fig.add_axes([0.9, 0.16, 0.04, 0.8]))
+
+cbar.set_label('Step')
+
+# Set axis labels
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+
+# Show the 3D plot
+plt.show()
+
 
 #STEP 3: merely looking at the correlation between points in the corr matrix of training data
 corr_matrix = (df.drop(columns=["Step"])).corr()
@@ -152,6 +172,20 @@ cm = confusion_matrix(test_y, model1_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix = cm)
 disp.plot()
 
-#STEP 6:
 
+#STEP 6:
+print("\ndumping model 1 into joblib file")
 joblib.dump(best_model1,"best_model.joblib")
+
+real_data = [[9.375, 3.0625, 1.51],
+        [6.995, 5.125, 0.3875],
+        [0, 3.0625, 1.93],
+        [9.4, 3, 1.8],
+        [9.4, 3, 1.3]]
+real_data = pd.DataFrame(real_data, columns=['X', 'Y', 'Z'])
+scaled_r_data = scaler.transform(real_data)
+z = pd.DataFrame(scaled_r_data, columns=real_data.columns)    
+
+real_step = best_model1.predict(z)
+
+print("predicted steps:",real_step)
