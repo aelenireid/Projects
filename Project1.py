@@ -97,7 +97,7 @@ best_model1 = grid_search.best_estimator_
 
 
 
-#model 2 Support vector machine
+#model 2 logistic regression
 model2 = LogisticRegression(random_state= 10)
 
 params2 = {
